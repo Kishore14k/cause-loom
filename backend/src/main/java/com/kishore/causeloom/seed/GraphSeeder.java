@@ -3,20 +3,15 @@ package com.kishore.causeloom.seed;
 import com.falkordb.Graph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Component
-@ConditionalOnProperty(name = "causeloom.seed.enabled", havingValue = "true")
-public class GraphSeeder implements ApplicationRunner {
+//@ConditionalOnProperty(name = "causeloom.seed.enabled", havingValue = "true")
+public class GraphSeeder {
 
     private static final Logger log = LoggerFactory.getLogger(GraphSeeder.class);
 
@@ -35,8 +30,7 @@ public class GraphSeeder implements ApplicationRunner {
         this.graph = graph;
     }
 
-    @Override
-    public void run(ApplicationArguments args) {
+    public void seed() {
         reset();
         seedTeams();
         seedServices();
