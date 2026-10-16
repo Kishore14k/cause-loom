@@ -1,10 +1,10 @@
 package com.kishore.causeloom.controller;
 
 import com.kishore.causeloom.models.Alert;
+import com.kishore.causeloom.models.AlertRequest;
+import com.kishore.causeloom.models.AlertResult;
 import com.kishore.causeloom.service.AlertService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +21,10 @@ public class AlertController {
     @GetMapping("/active")
     public List<Alert> activeAlerts() {
         return alertService.getActiveAlerts();
+    }
+
+    @PostMapping
+    public AlertResult ingest(@RequestBody AlertRequest request) {
+        return alertService.ingest(request);
     }
 }

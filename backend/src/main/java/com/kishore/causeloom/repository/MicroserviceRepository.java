@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MicroserviceRepository {
@@ -72,5 +73,19 @@ public class MicroserviceRepository {
             return ((Number) r.getValue("c")).intValue() > 0;
         }
         return false;
+    }
+
+    public Optional<String> findStatus(String name) {
+        ResultSet rs = graph.query("MATCH (s:Service {name: $name}) RETURN s.status AS status",
+                Map.of("name", name));
+        for (Record r : rs) {
+            return Optional.of(r.getString("status"));
+        }
+        return Optional.empty();
+    }
+
+    public void updateStatus(String name, String status) {
+        graph.query("MATCH (s:Service {name: $name}) SET s.status = $status",
+                Map.of("name", name, "status", status));
     }
 }

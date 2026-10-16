@@ -60,4 +60,13 @@ public class MicroserviceService {
             throw new ServiceNotFoundException("Service '" + name + "' not found");
         }
     }
+
+    public String getStatus(String name) {
+        return microserviceRepository.findStatus(name)
+                .orElseThrow(() -> new ServiceNotFoundException("Service '" + name + "' not found"));
+    }
+
+    public void markStatus(String name, String status) {
+        microserviceRepository.updateStatus(name, status);
+    }
 }
