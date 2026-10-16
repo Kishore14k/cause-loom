@@ -1,5 +1,6 @@
 package com.kishore.causeloom.service;
 
+import com.kishore.causeloom.exception.ServiceNotFoundException;
 import com.kishore.causeloom.models.*;
 import com.kishore.causeloom.repository.MicroserviceRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class MicroserviceService {
     }
 
     public BlastRadius getBlastRadius(String serviceName) {
+        requireService(serviceName);
         List<AffectedService> affected = microserviceRepository.findDependents(serviceName);
         List<AffectedService> hidden = affected.stream()
                 .filter(a -> !"failing".equals(a.status()))
@@ -28,6 +30,7 @@ public class MicroserviceService {
     }
 
     public SeverityAssessment assessSeverity(String serviceName) {
+        requireService(serviceName);
         List<ServiceRank> ranks = microserviceRepository.findPageRank();
         int affectedCount = getBlastRadius(serviceName).affected().size();
 
@@ -50,5 +53,11 @@ public class MicroserviceService {
             level = "medium";
         }
         return new SeverityAssessment(level, rank, ranks.size(), score, affectedCount);
+    }
+
+    private void requireService(String name) {
+        if (!microserviceRepository.existsByName(name)) {
+            throw new ServiceNotFoundException("Service '" + name + "' not found");
+        }
     }
 }

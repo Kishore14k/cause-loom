@@ -64,4 +64,13 @@ public class MicroserviceRepository {
         }
         return result;
     }
+
+    public boolean existsByName(String name) {
+        ResultSet rs = graph.query("MATCH (s:Service {name: $name}) RETURN count(s) AS c",
+                Map.of("name", name));
+        for (Record r : rs) {
+            return ((Number) r.getValue("c")).intValue() > 0;
+        }
+        return false;
+    }
 }
