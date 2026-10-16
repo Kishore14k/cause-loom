@@ -5,6 +5,7 @@ import com.falkordb.Record;
 import com.falkordb.ResultSet;
 import com.kishore.causeloom.models.AffectedService;
 import com.kishore.causeloom.models.Microservice;
+import com.kishore.causeloom.models.ServiceRank;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -46,6 +47,20 @@ public class MicroserviceRepository {
         for (Record r : rs) {
             result.add(new AffectedService(r.getString("name"), r.getString("status"),
                     ((Number) r.getValue("hops")).intValue()));
+        }
+        return result;
+    }
+
+    public List<ServiceRank> findPageRank() {
+        ResultSet rs = graph.query("""
+            CALL algo.pageRank('Service','DEPENDS_ON') YIELD node, score
+            RETURN node.name AS name, score
+            ORDER BY score DESC
+            """);
+        List<ServiceRank> result = new ArrayList<>();
+        for (Record r : rs) {
+            result.add(new ServiceRank(r.getString("name"),
+                    ((Number) r.getValue("score")).doubleValue()));
         }
         return result;
     }

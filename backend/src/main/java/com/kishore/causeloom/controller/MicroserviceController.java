@@ -2,6 +2,7 @@ package com.kishore.causeloom.controller;
 
 import com.kishore.causeloom.models.BlastRadius;
 import com.kishore.causeloom.models.Microservice;
+import com.kishore.causeloom.models.SeverityAssessment;
 import com.kishore.causeloom.service.MicroserviceService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,5 +29,10 @@ public class MicroserviceController {
     @GetMapping("/{name}/blast-radius")
     public BlastRadius blastRadius(@PathVariable String name) {
         return microserviceService.getBlastRadius(name);
+    }
+
+    @GetMapping("/{name}/severity")
+    public SeverityAssessment severity(@PathVariable String name) {
+        return microserviceService.assessSeverity(name);
     }
 }

@@ -45,7 +45,8 @@ public class IncidentService {
         String assignee = responder.responder() != null ? responder.responder().name() : null;
 
         String id = "INC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        String severity = "critical"; // placeholder, the graph computes this in the next step
+        SeverityAssessment assessment = microserviceService.assessSeverity(rootCause);
+        String severity = assessment.level();
         String title = rootCause + " failure affecting " + affectedNames.size() + " services";
         Incident incident = new Incident(id, title, severity, "open",
                 Instant.now().toString(), rootCause);
@@ -54,7 +55,8 @@ public class IncidentService {
                 + ". Affected: " + String.join(", ", affectedNames)
                 + ". Not yet alerting: " + blast.hiddenVictims().stream()
                 .map(AffectedService::name).collect(Collectors.joining(", "))
-                + ". " + responder.message();
+                + ". " + responder.message() + " Severity " + severity + ": PageRank #" + assessment.rank() + " of "
+                + assessment.totalServices() + ", " + assessment.affectedCount() + " services affected.";
 
         incidentRepository.create(incident, summary, affectedNames, assignee);
         return new IncidentResult(true, incident, "Incident " + id + " created");
