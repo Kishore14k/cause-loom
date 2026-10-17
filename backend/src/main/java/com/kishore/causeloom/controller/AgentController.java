@@ -1,5 +1,6 @@
 package com.kishore.causeloom.controller;
 
+import com.kishore.causeloom.models.AgentResponse;
 import com.kishore.causeloom.models.InvestigateRequest;
 import com.kishore.causeloom.service.AgentService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,9 @@ public class AgentController {
     }
 
     @PostMapping("/investigate")
-    public Map<String, String> investigate(@RequestBody(required = false) InvestigateRequest request) {
+    public AgentResponse investigate(@RequestBody(required = false) InvestigateRequest request) {
         String message = (request == null || request.message() == null)
                 ? "Investigate the current alerts." : request.message();
-        return Map.of("explanation", agentService.investigate(message));
+        return agentService.investigate(message);
     }
 }

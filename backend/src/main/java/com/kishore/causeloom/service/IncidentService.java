@@ -48,7 +48,8 @@ public class IncidentService {
         String id = "INC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         SeverityAssessment assessment = microserviceService.assessSeverity(rootCause);
         String severity = assessment.level();
-        String title = rootCause + " failure affecting " + affectedNames.size() + " services";
+        int count = affectedNames.size();
+        String title = rootCause + " failure affecting " + count + (count == 1 ? " service" : " services");
         Incident incident = new Incident(id, title, severity, "open",
                 Instant.now().toString(), rootCause);
 
@@ -76,5 +77,9 @@ public class IncidentService {
         List<String> restored = incidentRepository.restoreServices(incidentId);
         return new ResolveResult(true, incidentId, restored,
                 "Incident " + incidentId + " closed, " + restored.size() + " services restored to healthy");
+    }
+
+    public Optional<Incident> findOpenIncident(String rootCause) {
+        return incidentRepository.findOpenByRootCause(rootCause);
     }
 }
