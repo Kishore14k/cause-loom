@@ -30,29 +30,27 @@ public class MicroserviceService {
     }
 
     public SeverityAssessment assessSeverity(String serviceName) {
-        requireService(serviceName);
+        Microservice service = microserviceRepository.findByName(serviceName)
+                .orElseThrow(() -> new ServiceNotFoundException("Service '" + serviceName + "' not found"));
+
         List<ServiceRank> ranks = microserviceRepository.findPageRank();
         int affectedCount = getBlastRadius(serviceName).affected().size();
 
-        int rank = 0;
-        double score = 0;
-        for (int i = 0; i < ranks.size(); i++) {
-            if (ranks.get(i).name().equals(serviceName)) {
-                rank = i + 1;
-                score = ranks.get(i).score();
-                break;
-            }
-        }
+        double score = ranks.stream()
+                .filter(r -> r.name().equals(serviceName))
+                .mapToDouble(ServiceRank::score)
+                .findFirst().orElse(0);
+        int rank = 1 + (int) ranks.stream().filter(r -> r.score() > score).count();
 
         String level;
-        if ((rank >= 1 && rank <= 3) || affectedCount >= 5) {
+        if (rank <= 3 || affectedCount >= 5) {
             level = "critical";
-        } else if ((rank >= 1 && rank <= 6) || affectedCount >= 3) {
+        } else if (rank <= 6 || affectedCount >= 3 || service.tier() == 1) {
             level = "high";
         } else {
             level = "medium";
         }
-        return new SeverityAssessment(level, rank, ranks.size(), score, affectedCount);
+        return new SeverityAssessment(level, rank, ranks.size(), score, affectedCount, service.tier());
     }
 
     private void requireService(String name) {

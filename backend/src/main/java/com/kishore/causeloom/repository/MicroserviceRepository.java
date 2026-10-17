@@ -88,4 +88,17 @@ public class MicroserviceRepository {
         graph.query("MATCH (s:Service {name: $name}) SET s.status = $status",
                 Map.of("name", name, "status", status));
     }
+
+    public Optional<Microservice> findByName(String name) {
+        ResultSet rs = graph.query("""
+            MATCH (s:Service {name: $name})
+            RETURN s.name AS name, s.tier AS tier, s.type AS type, s.status AS status
+            """, Map.of("name", name));
+        for (Record r : rs) {
+            return Optional.of(new Microservice(r.getString("name"),
+                    ((Number) r.getValue("tier")).intValue(),
+                    r.getString("type"), r.getString("status")));
+        }
+        return Optional.empty();
+    }
 }
