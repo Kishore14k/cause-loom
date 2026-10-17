@@ -1,0 +1,60 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #060a13;
+  --surface: #0c1424;
+  --surface-2: #111c33;
+  --border: #1c2b4a;
+  --text: #e6edf7;
+  --muted: #8da2c6;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.15);
+
+  --root: #ef4444;
+  --failing: #f59e0b;
+  --hidden: #eab308;
+  --healthy: #22c55e;
+  --degraded: #a78bfa;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 10% -10%, #0f1f45 0%, var(--bg) 60%);
+  background-attachment: fixed;
+}
+
+code, .mono { font-family: "JetBrains Mono", Consolas, monospace; }
+
+button {
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s;
+
+  &:hover:not(:disabled) { filter: brightness(1.15); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &.ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+}
