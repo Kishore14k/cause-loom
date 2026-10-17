@@ -42,15 +42,21 @@ public class MicroserviceService {
                 .findFirst().orElse(0);
         int rank = 1 + (int) ranks.stream().filter(r -> r.score() > score).count();
 
-        String level;
-        if (rank <= 3 || affectedCount >= 5) {
-            level = "critical";
-        } else if (rank <= 6 || affectedCount >= 3 || service.tier() == 1) {
-            level = "high";
-        } else {
-            level = "medium";
+        int hard = microserviceRepository.countCriticalDependents(serviceName);
+
+        int level = service.tier() == 1 ? 1 : 0;
+        if (hard >= 5 || (service.tier() == 1 && hard >= 2)) {
+            level = 2;
+        } else if (hard >= 3) {
+            level = Math.max(level, 1);
         }
-        return new SeverityAssessment(level, rank, ranks.size(), score, affectedCount, service.tier());
+        if (rank <= 3 && hard > 0) {                               // PageRank only boosts
+            level = Math.min(level + 1, 2);
+        }
+        String levelName = List.of("medium", "high", "critical").get(level);
+
+        return new SeverityAssessment(levelName, rank, ranks.size(), score,
+                affectedCount, hard, service.tier());
     }
 
     private void requireService(String name) {

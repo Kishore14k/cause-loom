@@ -101,4 +101,16 @@ public class MicroserviceRepository {
         }
         return Optional.empty();
     }
+
+    public int countCriticalDependents(String name) {
+        ResultSet rs = graph.query("""
+            MATCH p=(root:Service {name: $name})<-[:DEPENDS_ON*1..5]-(v:Service)
+            WHERE all(r IN relationships(p) WHERE r.critical = true)
+            RETURN count(DISTINCT v) AS c
+            """, Map.of("name", name));
+        for (Record r : rs) {
+            return ((Number) r.getValue("c")).intValue();
+        }
+        return 0;
+    }
 }
