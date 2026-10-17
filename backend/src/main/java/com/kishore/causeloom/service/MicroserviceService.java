@@ -5,6 +5,7 @@ import com.kishore.causeloom.models.*;
 import com.kishore.causeloom.repository.MicroserviceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +51,7 @@ public class MicroserviceService {
         } else if (hard >= 3) {
             level = Math.max(level, 1);
         }
-        if (rank <= 3 && hard > 0) {                               // PageRank only boosts
+        if (rank <= 3 && hard > 0) {
             level = Math.min(level + 1, 2);
         }
         String levelName = List.of("medium", "high", "critical").get(level);
@@ -72,5 +73,20 @@ public class MicroserviceService {
 
     public void markStatus(String name, String status) {
         microserviceRepository.updateStatus(name, status);
+    }
+
+    public ImpactGraph getImpactGraph(String serviceName) {
+        BlastRadius blast = getBlastRadius(serviceName);
+
+        String rootStatus = microserviceRepository.findStatus(serviceName).orElse("unknown");
+        List<ImpactNode> nodes = new ArrayList<>();
+        nodes.add(new ImpactNode(serviceName, rootStatus, "root_cause", 0));
+        for (AffectedService a : blast.affected()) {
+            String role = "failing".equals(a.status()) ? "failing" : "hidden_victim";
+            nodes.add(new ImpactNode(a.name(), a.status(), role, a.hops()));
+        }
+
+        List<String> names = nodes.stream().map(ImpactNode::name).toList();
+        return new ImpactGraph(serviceName, nodes, microserviceRepository.findEdgesAmong(names));
     }
 }

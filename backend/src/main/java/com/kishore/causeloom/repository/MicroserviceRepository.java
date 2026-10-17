@@ -4,6 +4,7 @@ import com.falkordb.Graph;
 import com.falkordb.Record;
 import com.falkordb.ResultSet;
 import com.kishore.causeloom.models.AffectedService;
+import com.kishore.causeloom.models.ImpactEdge;
 import com.kishore.causeloom.models.Microservice;
 import com.kishore.causeloom.models.ServiceRank;
 import org.springframework.stereotype.Repository;
@@ -112,5 +113,19 @@ public class MicroserviceRepository {
             return ((Number) r.getValue("c")).intValue();
         }
         return 0;
+    }
+
+    public List<ImpactEdge> findEdgesAmong(List<String> names) {
+        ResultSet rs = graph.query("""
+            MATCH (a:Service)-[d:DEPENDS_ON]->(b:Service)
+            WHERE a.name IN $names AND b.name IN $names
+            RETURN a.name AS source, b.name AS target, d.critical AS critical
+            """, Map.of("names", names));
+        List<ImpactEdge> result = new ArrayList<>();
+        for (Record r : rs) {
+            result.add(new ImpactEdge(r.getString("source"), r.getString("target"),
+                    (Boolean) r.getValue("critical")));
+        }
+        return result;
     }
 }

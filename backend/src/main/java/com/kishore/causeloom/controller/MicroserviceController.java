@@ -1,6 +1,7 @@
 package com.kishore.causeloom.controller;
 
 import com.kishore.causeloom.models.BlastRadius;
+import com.kishore.causeloom.models.ImpactGraph;
 import com.kishore.causeloom.models.Microservice;
 import com.kishore.causeloom.models.SeverityAssessment;
 import com.kishore.causeloom.service.MicroserviceService;
@@ -34,5 +35,10 @@ public class MicroserviceController {
     @GetMapping("/{name}/severity")
     public SeverityAssessment severity(@PathVariable String name) {
         return microserviceService.assessSeverity(name);
+    }
+
+    @GetMapping("/{name}/impact")
+    public ImpactGraph impact(@PathVariable String name) {
+        return microserviceService.getImpactGraph(name);
     }
 }
