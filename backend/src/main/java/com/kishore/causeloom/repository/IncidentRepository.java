@@ -66,4 +66,42 @@ public class IncidentRepository {
                     """, Map.of("id", incident.id(), "person", assignee));
         }
     }
+
+    public Optional<Incident> findById(String id) {
+        ResultSet rs = graph.query("""
+            MATCH (i:Incident {id: $id})-[:CAUSED_BY]->(s:Service)
+            RETURN i.id AS id, i.title AS title, i.severity AS severity,
+                   i.status AS status, i.createdAt AS createdAt, s.name AS rootCause
+            """, Map.of("id", id));
+        for (Record r : rs) {
+            return Optional.of(new Incident(r.getString("id"), r.getString("title"),
+                    r.getString("severity"), r.getString("status"),
+                    r.getString("createdAt"), r.getString("rootCause")));
+        }
+        return Optional.empty();
+    }
+
+    public void close(String id, String now) {
+        graph.query("MATCH (i:Incident {id: $id}) SET i.status = 'closed', i.closedAt = $now",
+                Map.of("id", id, "now", now));
+        graph.query("""
+            MATCH (i:Incident {id: $id})-[:INCLUDES]->(a:Alert)
+            SET a.status = 'resolved', a.resolvedAt = $now
+            """, Map.of("id", id, "now", now));
+    }
+
+    public List<String> restoreServices(String id) {
+        ResultSet rs = graph.query("""
+            MATCH (i:Incident {id: $id})-[:CAUSED_BY|AFFECTS]->(s:Service)
+            OPTIONAL MATCH (other:Incident {status:'open'})-[:CAUSED_BY|AFFECTS]->(s)
+            WITH s, other WHERE other IS NULL
+            SET s.status = 'healthy'
+            RETURN s.name AS name
+            """, Map.of("id", id));
+        List<String> restored = new ArrayList<>();
+        for (Record r : rs) {
+            restored.add(r.getString("name"));
+        }
+        return restored;
+    }
 }

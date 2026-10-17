@@ -1,5 +1,6 @@
 package com.kishore.causeloom.service;
 
+import com.kishore.causeloom.exception.IncidentNotFoundException;
 import com.kishore.causeloom.models.*;
 import com.kishore.causeloom.repository.IncidentRepository;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,20 @@ public class IncidentService {
 
         incidentRepository.create(incident, summary, affectedNames, assignee);
         return new IncidentResult(true, incident, "Incident " + id + " created");
+    }
+
+    public ResolveResult resolveIncident(String incidentId) {
+        Incident incident = incidentRepository.findById(incidentId)
+                .orElseThrow(() -> new IncidentNotFoundException("Incident '" + incidentId + "' not found"));
+
+        if ("closed".equals(incident.status())) {
+            return new ResolveResult(false, incidentId, List.of(),
+                    "Incident " + incidentId + " is already closed");
+        }
+
+        incidentRepository.close(incidentId, Instant.now().toString());
+        List<String> restored = incidentRepository.restoreServices(incidentId);
+        return new ResolveResult(true, incidentId, restored,
+                "Incident " + incidentId + " closed, " + restored.size() + " services restored to healthy");
     }
 }
