@@ -128,4 +128,32 @@ public class MicroserviceRepository {
         }
         return result;
     }
+
+    public List<Microservice> findAll() {
+        ResultSet rs = graph.query("""
+            MATCH (s:Service)
+            RETURN s.name AS name, s.tier AS tier, s.type AS type, s.status AS status
+            ORDER BY s.name
+            """);
+        List<Microservice> result = new ArrayList<>();
+        for (Record r : rs) {
+            result.add(new Microservice(r.getString("name"),
+                    ((Number) r.getValue("tier")).intValue(),
+                    r.getString("type"), r.getString("status")));
+        }
+        return result;
+    }
+
+    public List<ImpactEdge> findAllEdges() {
+        ResultSet rs = graph.query("""
+            MATCH (a:Service)-[d:DEPENDS_ON]->(b:Service)
+            RETURN a.name AS source, b.name AS target, d.critical AS critical
+            """);
+        List<ImpactEdge> result = new ArrayList<>();
+        for (Record r : rs) {
+            result.add(new ImpactEdge(r.getString("source"), r.getString("target"),
+                    (Boolean) r.getValue("critical")));
+        }
+        return result;
+    }
 }

@@ -1,10 +1,13 @@
 package com.kishore.causeloom.controller;
 
 import com.kishore.causeloom.models.CreateIncidentRequest;
+import com.kishore.causeloom.models.Incident;
 import com.kishore.causeloom.models.IncidentResult;
 import com.kishore.causeloom.models.ResolveResult;
 import com.kishore.causeloom.service.IncidentService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -24,5 +27,10 @@ public class IncidentController {
     @PostMapping("/{id}/resolve")
     public ResolveResult resolve(@PathVariable String id) {
         return incidentService.resolveIncident(id);
+    }
+
+    @GetMapping
+    public List<Incident> list() {
+        return incidentService.listIncidents();
     }
 }

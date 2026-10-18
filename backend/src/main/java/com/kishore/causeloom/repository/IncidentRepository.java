@@ -104,4 +104,20 @@ public class IncidentRepository {
         }
         return restored;
     }
+
+    public List<Incident> findAll() {
+        ResultSet rs = graph.query("""
+            MATCH (i:Incident)-[:CAUSED_BY]->(s:Service)
+            RETURN i.id AS id, i.title AS title, i.severity AS severity,
+                   i.status AS status, i.createdAt AS createdAt, s.name AS rootCause
+            ORDER BY i.createdAt DESC
+            """);
+        List<Incident> result = new ArrayList<>();
+        for (Record r : rs) {
+            result.add(new Incident(r.getString("id"), r.getString("title"),
+                    r.getString("severity"), r.getString("status"),
+                    r.getString("createdAt"), r.getString("rootCause")));
+        }
+        return result;
+    }
 }

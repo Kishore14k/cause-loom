@@ -89,4 +89,9 @@ public class MicroserviceService {
         List<String> names = nodes.stream().map(ImpactNode::name).toList();
         return new ImpactGraph(serviceName, nodes, microserviceRepository.findEdgesAmong(names));
     }
+
+    public TopologyGraph getTopology() {
+        return new TopologyGraph(microserviceRepository.findAll(),
+                microserviceRepository.findAllEdges());
+    }
 }

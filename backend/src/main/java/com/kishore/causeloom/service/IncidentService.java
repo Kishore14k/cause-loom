@@ -82,4 +82,8 @@ public class IncidentService {
     public Optional<Incident> findOpenIncident(String rootCause) {
         return incidentRepository.findOpenByRootCause(rootCause);
     }
+
+    public List<Incident> listIncidents() {
+        return incidentRepository.findAll();
+    }
 }
