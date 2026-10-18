@@ -1,0 +1,23 @@
+<section class="panel">
+  <form (ngSubmit)="submit()">
+    <label for="investigation-message">Brief for the agent</label>
+    <textarea
+      id="investigation-message"
+      name="message"
+      [(ngModel)]="message"
+      rows="2"
+      maxlength="1200"
+      required
+      [disabled]="loading()"
+    ></textarea>
+    <div class="form-footer">
+      <p class="quiet-text">
+        The agent may create or reuse incidents. Graph results are the evidence, so you can inspect
+        the graph without calling the agent.
+      </p>
+      <button class="button primary" type="submit" [disabled]="loading() || !message.trim()">
+        <app-icon name="spark" /> {{ loading() ? 'Working' : 'Investigate' }}
+      </button>
+    </div>
+  </form>
+</section>

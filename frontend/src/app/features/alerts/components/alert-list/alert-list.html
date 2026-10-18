@@ -1,0 +1,40 @@
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Severity</th>
+        <th>Message</th>
+        <th>Alert ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (alert of alerts(); track alert.id) {
+        <tr>
+          <td>
+            <span class="service"><app-icon name="layers" /><strong>{{ alert.service }}</strong></span>
+          </td>
+          <td><app-status-badge [value]="alert.severity" /></td>
+          <td class="message">{{ alert.message }}</td>
+          <td class="mono muted">{{ alert.id }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4">
+            <div class="empty-state">
+              <app-icon name="alert" />
+              <h3>{{ filtered() ? 'No matching alerts' : 'No open alerts' }}</h3>
+              <p>
+                {{
+                  filtered()
+                    ? 'Try a different service, message or ID.'
+                    : 'Record an alert here, or simulate an outage from the Investigation page.'
+                }}
+              </p>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

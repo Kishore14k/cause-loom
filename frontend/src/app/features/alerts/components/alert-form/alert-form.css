@@ -1,0 +1,9 @@
+:host { display: block; margin-bottom: 18px; }
+form { display: flex; flex-direction: column; gap: 12px; }
+.fields { display: grid; grid-template-columns: 1fr 200px; gap: 12px; }
+.fields select { width: 100%; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+@media (max-width: 640px) {
+  .fields { grid-template-columns: 1fr; }
+}

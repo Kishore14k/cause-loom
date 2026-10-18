@@ -1,0 +1,33 @@
+<section class="panel">
+  <div class="panel-heading">
+    <h2><app-icon name="spark" /> What the agent found</h2>
+    <button
+      class="icon-button"
+      type="button"
+      aria-label="Download the investigation as JSON"
+      title="Download as JSON"
+      (click)="exportResult()"
+    >
+      <app-icon name="download" />
+    </button>
+  </div>
+
+  @if (stale()) {
+    <p class="stale">
+      This is a previous investigation. The graph may have changed, so run the agent again for a
+      fresh explanation.
+    </p>
+  }
+
+  <div class="meta quiet-text">
+    Written by the model from graph tool results
+    @if (receivedAt()) {
+      <time>at {{ receivedAt() | date: 'shortTime' }}</time>
+    }
+  </div>
+  <p class="explanation">
+    {{ result().explanation || 'No explanation came back. Review the graph panels and the tool list.' }}
+  </p>
+
+  <app-tool-trace [steps]="result().steps" />
+</section>

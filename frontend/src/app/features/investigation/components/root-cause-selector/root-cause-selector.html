@@ -1,0 +1,14 @@
+<div class="root-selector">
+  <label for="root-cause">Root cause</label>
+  <select id="root-cause" [value]="selected()" [disabled]="disabled()" (change)="select($event)">
+    @for (root of roots(); track root.name) {
+      <option [value]="root.name" [selected]="root.name === selected()">{{ root.name }}</option>
+    }
+  </select>
+  @if (severity(); as level) {
+    <app-status-badge [value]="level" />
+  }
+  @if (roots().length > 1) {
+    <span class="quiet-text">{{ roots().length }} separate failures found</span>
+  }
+</div>

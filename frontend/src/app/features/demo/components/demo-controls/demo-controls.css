@@ -1,0 +1,28 @@
+:host { display: block; margin-top: 22px; }
+
+.demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 16px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  scroll-margin-top: 16px;
+}
+
+.intro { display: flex; align-items: center; gap: 12px; }
+.intro app-icon { font-size: 22px; color: var(--accent); }
+.intro p { color: var(--muted); font-size: 13.5px; }
+
+.actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.reset {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  text-decoration: underline;
+  padding: 6px 8px;
+}
+.reset:hover:not(:disabled) { color: #ff8a8a; }

@@ -1,0 +1,47 @@
+<section class="panel">
+  <div class="panel-heading">
+    <h2><app-icon name="incident" /> Incident</h2>
+  </div>
+  <div class="panel-body">
+    <app-notice-banner [notice]="notice()" (dismissed)="notice.set(null)" />
+    <p class="quiet-text">Selected root cause</p>
+    <h3 class="root">{{ rootCause() }}</h3>
+
+    @if (incident(); as item) {
+      <div class="ticket">
+        <span class="mono">{{ item.id }}</span>
+        <app-status-badge [value]="item.status" />
+      </div>
+      <p class="description">{{ item.title }}</p>
+      <button
+        class="button secondary"
+        type="button"
+        [disabled]="disabled() || loading() || item.status !== 'open'"
+        (click)="requestResolution()"
+      >
+        <app-icon name="check" /> Resolve incident
+      </button>
+    } @else {
+      <p class="description">
+        Create an incident for this root cause, or get the open one if it already exists.
+      </p>
+      <button class="button secondary" type="button" [disabled]="disabled() || loading()" (click)="create()">
+        <app-icon name="plus" /> {{ loading() ? 'Working' : 'Create or get incident' }}
+      </button>
+    }
+
+    <p class="quiet-text">
+      Resolving closes the incident, resolves its alerts and restores service status in the graph.
+      It does not repair a real system.
+    </p>
+  </div>
+</section>
+
+<app-confirm-dialog
+  title="Resolve this incident?"
+  [message]="
+    'Close ' + (incident()?.id || '') + ' and resolve its linked alerts? The backend restores services that no other open incident covers.'
+  "
+  confirmLabel="Resolve incident"
+  (confirmed)="resolve()"
+/>

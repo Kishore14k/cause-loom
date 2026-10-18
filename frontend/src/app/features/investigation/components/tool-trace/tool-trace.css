@@ -1,0 +1,23 @@
+:host { display: block; margin-top: 16px; }
+
+summary { cursor: pointer; font-weight: 600; }
+summary span { color: var(--muted); font-weight: 400; margin-left: 8px; font-size: 13.5px; }
+
+.steps { margin-top: 10px; border-left: 2px solid var(--border); padding-left: 4px; }
+
+.step { display: flex; align-items: center; gap: 12px; padding: 7px 0 7px 12px; position: relative; }
+.step::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.step div { flex: 1; min-width: 0; }
+.step strong { display: block; }
+.step small { color: var(--accent); font-family: var(--font-mono); font-size: 12.5px; }
+
+.number { width: 20px; color: var(--muted); font-size: 13px; }
+.number.failed { color: #ff8a8a; }

@@ -1,0 +1,22 @@
+:host { display: block; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.right-column { display: flex; flex-direction: column; gap: 18px; }
+
+.results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-grid, .results-grid { grid-template-columns: 1fr; }
+}

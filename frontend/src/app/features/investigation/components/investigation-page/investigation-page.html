@@ -1,0 +1,111 @@
+<app-page-header
+  title="Incident investigation"
+  subtitle="Find the cause, see the impact, and know who to page."
+>
+  <button class="button secondary" type="button" [disabled]="busy()" (click)="refresh()">
+    <app-icon name="refresh" /> Refresh graph
+  </button>
+</app-page-header>
+
+<app-notice-banner [notice]="notice()" (dismissed)="notice.set(null)" />
+
+@if (operation(); as task) {
+  <div class="working" role="status">
+    <span class="spinner"></span>
+    {{
+      task === 'investigate'
+        ? 'The agent is calling graph tools. The list of tools it used appears when it finishes.'
+        : 'Loading graph evidence from the backend'
+    }}
+  </div>
+}
+
+<app-investigation-metrics
+  [alertCount]="updatedAt() ? alerts().length : null"
+  [rootCount]="updatedAt() ? roots().length : null"
+  [finding]="finding()"
+/>
+
+<app-investigation-form [loading]="busy()" (submitted)="investigate($event)" />
+
+<div class="dashboard-grid">
+  <section class="panel graph-panel">
+    <div class="panel-heading">
+      <h2><app-icon name="graph" /> Impact graph</h2>
+      <span class="hint">Live from FalkorDB</span>
+    </div>
+
+    @if (roots().length) {
+      <app-root-cause-selector
+        [roots]="roots()"
+        [selected]="selectedRoot()"
+        [severity]="finding()?.severity?.level ?? null"
+        [disabled]="busy()"
+        (selectedChange)="selectRoot($event)"
+      />
+    }
+
+    @if (finding(); as selected) {
+      <app-impact-graph [graph]="selected.impact" [topology]="topology()" />
+    } @else {
+      <div class="empty-state">
+        <app-icon name="graph" />
+        <h3>No root cause to show</h3>
+        <p>
+          Everything looks healthy, or the backend is not connected. To try the demo, simulate an
+          outage with the controls at the bottom of this page.
+        </p>
+      </div>
+    }
+
+    <div class="list-footer">
+      <span>Relationships come from the graph API</span>
+      <span>{{ updatedAt() ? 'Updated ' + (updatedAt() | date: 'shortTime') : 'Not loaded yet' }}</span>
+    </div>
+  </section>
+
+  <div class="right-column">
+    <app-responder-panel [result]="finding()?.onCall ?? null" />
+    <app-severity-panel [assessment]="finding()?.severity ?? null" />
+  </div>
+</div>
+
+@if (finding(); as selected) {
+  <app-hidden-victims [graph]="selected.impact" />
+}
+
+<div class="results-grid">
+  <div>
+    @if (result(); as investigation) {
+      <app-investigation-result [result]="investigation" [receivedAt]="receivedAt()" [stale]="stale()" />
+    } @else {
+      <section class="panel">
+        <div class="empty-state">
+          <app-icon name="spark" />
+          <h3>Turn signals into a response</h3>
+          <p>
+            Press Investigate to get the agent's explanation and the tools it called. The graph
+            panels above work without calling the model.
+          </p>
+        </div>
+      </section>
+    }
+  </div>
+
+  @if (finding(); as selected) {
+    <app-incident-action
+      [rootCause]="selected.rootCause"
+      [initialIncident]="selected.incident"
+      [disabled]="busy()"
+      (busyChange)="childBusy.set($event)"
+      (resolved)="refresh()"
+      (recorded)="stale.set(!!result())"
+    />
+  }
+</div>
+
+<app-demo-controls
+  [disabled]="busy()"
+  (busyChange)="childBusy.set($event)"
+  (changed)="onDemoChanged($event)"
+/>

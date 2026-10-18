@@ -1,0 +1,13 @@
+@if (notice(); as item) {
+  <div
+    class="notice"
+    [attr.data-kind]="item.kind"
+    [attr.role]="item.kind === 'error' ? 'alert' : 'status'"
+  >
+    <app-icon [name]="item.kind === 'error' ? 'alert' : 'info'" />
+    <span>{{ item.message }}</span>
+    <button type="button" class="icon-button" aria-label="Dismiss message" (click)="dismissed.emit()">
+      <app-icon name="close" />
+    </button>
+  </div>
+}

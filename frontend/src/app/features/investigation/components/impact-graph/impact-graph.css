@@ -1,0 +1,66 @@
+:host { display: block; }
+
+.graph-tools { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+.trace { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.trace label, .toggle { margin: 0; }
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.toggle input { width: auto; accent-color: var(--accent); }
+.zoom-controls { display: flex; gap: 4px; margin-left: auto; }
+
+.graph-stage { position: relative; }
+.graph-canvas {
+  width: 100%;
+  height: 460px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #060d1e;
+}
+.graph-direction {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  color: var(--muted);
+  font-size: 12.5px;
+  pointer-events: none;
+}
+
+.legend {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.legend li { display: flex; align-items: center; gap: 7px; }
+
+.swatch { width: 14px; height: 14px; border-radius: 4px; border: 2px solid; }
+.swatch.root { border-color: var(--root); background: #3a1216; }
+.swatch.failing { border-color: var(--failing); background: #33200a; }
+.swatch.hidden { border-color: var(--hidden); border-style: dashed; background: #2c2909; }
+.swatch.degraded { border-color: var(--degraded); background: #1b1740; }
+.swatch.healthy { border-color: #1f6b46; background: #0f1b36; }
+.line { width: 22px; height: 0; border-top: 2px dashed #5d7099; }
+
+.path-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 14px;
+}
+.path-nodes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--text); }
+.path-nodes strong { color: #ff9d9d; }
+
+.evidence-table { margin-top: 12px; }
+.evidence-table summary { cursor: pointer; color: var(--muted); font-size: 13.5px; }
+.evidence-table .table-scroll { margin-top: 10px; }
+
+@media (max-width: 860px) { .graph-canvas { height: 360px; } }

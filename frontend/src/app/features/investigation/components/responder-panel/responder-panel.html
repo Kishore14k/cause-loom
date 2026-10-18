@@ -1,0 +1,46 @@
+<section class="panel">
+  <div class="panel-heading">
+    <h2><app-icon name="person" /> Who to page</h2>
+  </div>
+  @if (result(); as owner) {
+    <div class="panel-body">
+      <div class="team">
+        <span class="quiet-text">Owning team</span>
+        <strong>{{ owner.team || 'Not assigned' }}</strong>
+      </div>
+
+      @if (owner.onCall; as primary) {
+        <div class="person">
+          <span class="avatar muted-avatar">{{ initials(primary.name) }}</span>
+          <div>
+            <strong>{{ primary.name }}</strong>
+            <small>{{ primary.role }}</small>
+          </div>
+          <app-status-badge [value]="primary.onLeave ? 'warning' : 'healthy'" />
+        </div>
+        <p class="availability">
+          {{ primary.onLeave ? 'On-call person is on leave' : 'On-call person is available' }}
+        </p>
+      }
+
+      @if (owner.escalated && owner.responder; as responder) {
+        <p class="escalation"><app-icon name="arrow" /> Escalated up the management chain</p>
+        <div class="person">
+          <span class="avatar">{{ initials(responder.name) }}</span>
+          <div>
+            <strong>{{ responder.name }}</strong>
+            <small>{{ responder.role }}</small>
+          </div>
+        </div>
+      }
+
+      <p class="message">{{ owner.message }}</p>
+      <p class="quiet-text"><app-icon name="info" /> This names who to page. It does not send a notification.</p>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <app-icon name="person" />
+      <p>The owning team and available responder appear once a root cause is selected.</p>
+    </div>
+  }
+</section>

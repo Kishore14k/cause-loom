@@ -1,0 +1,4 @@
+.title { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+.action { text-align: right; padding-right: 0; white-space: nowrap; }
+.closed { display: inline-flex; align-items: center; gap: 6px; color: #6fe0a6; font-size: 13.5px; }
+button.small { padding: 5px 11px; font-size: 13px; }

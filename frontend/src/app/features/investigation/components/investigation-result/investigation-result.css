@@ -1,0 +1,13 @@
+:host { display: block; }
+.meta { display: flex; gap: 6px; margin-bottom: 6px; }
+.explanation { white-space: pre-line; max-width: 72ch; }
+
+.stale {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbd38a;
+  font-size: 13.5px;
+}

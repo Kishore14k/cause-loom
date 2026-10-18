@@ -1,0 +1,24 @@
+:host { display: block; }
+.team { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.person { display: flex; align-items: center; gap: 12px; }
+.person div { flex: 1; }
+.person strong { display: block; }
+.person small { color: var(--muted); }
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #04102b;
+  flex: none;
+}
+.muted-avatar { background: var(--surface-2); color: var(--muted); border: 1px solid var(--border-strong); }
+
+.availability { color: var(--muted); font-size: 13.5px; }
+.escalation { color: var(--failing); font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.message { font-weight: 500; }

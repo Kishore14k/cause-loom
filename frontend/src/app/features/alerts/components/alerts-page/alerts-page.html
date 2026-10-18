@@ -1,0 +1,45 @@
+<app-page-header
+  title="Active alerts"
+  subtitle="Signals coming in from your services, ready for the agent to investigate."
+>
+  <button class="button secondary" type="button" [disabled]="loading()" (click)="refresh()">
+    <app-icon name="refresh" /> Refresh
+  </button>
+  <button class="button primary" type="button" [disabled]="loading()" (click)="showForm.set(true)">
+    <app-icon name="plus" /> Record alert
+  </button>
+</app-page-header>
+
+<app-notice-banner [notice]="notice()" (dismissed)="notice.set(null)" />
+
+@if (loading()) {
+  <div class="working" role="status"><span class="spinner"></span>Waiting for the backend</div>
+}
+
+@if (showForm()) {
+  <app-alert-form [loading]="loading()" (submitted)="record($event)" (cancelled)="showForm.set(false)" />
+}
+
+<section class="panel">
+  <div class="toolbar">
+    <div class="search">
+      <app-icon name="search" />
+      <input
+        aria-label="Search alerts"
+        placeholder="Search services, messages or IDs"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+      />
+    </div>
+    <a class="button secondary" routerLink="/investigation" fragment="demo">
+      <app-icon name="play" /> Demo controls
+    </a>
+  </div>
+
+  <app-alert-list [alerts]="filteredAlerts()" [filtered]="!!search().trim()" />
+
+  <div class="list-footer">
+    <span>{{ filteredAlerts().length }} of {{ alerts().length }} open alerts</span>
+    <span>Last refreshed {{ updatedAt() ? (updatedAt() | date: 'shortTime') : 'not yet' }}</span>
+  </div>
+</section>

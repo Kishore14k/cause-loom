@@ -1,0 +1,97 @@
+<div class="graph-tools">
+  <div class="trace">
+    <label for="path-start">Trace a dependency path</label>
+    <select id="path-start" [value]="selectedName()" (change)="select($any($event.target).value)">
+      <option value="">Show every dependency</option>
+      @for (node of graph().nodes; track node.name) {
+        @if (node.name !== graph().origin) {
+          <option [value]="node.name" [selected]="node.name === selectedName()">{{ node.name }}</option>
+        }
+      }
+    </select>
+  </div>
+
+  @if (canShowAll()) {
+    <label class="toggle">
+      <input type="checkbox" [checked]="showAll()" (change)="toggleAll()" />
+      Show the whole system
+    </label>
+  }
+
+  <div class="zoom-controls">
+    <button class="icon-button" type="button" (click)="zoom(1.2)" title="Zoom in" aria-label="Zoom in">
+      <app-icon name="plus" />
+    </button>
+    <button class="icon-button" type="button" (click)="zoom(0.8)" title="Zoom out" aria-label="Zoom out">
+      <app-icon name="minus" />
+    </button>
+    <button class="icon-button" type="button" (click)="fit()" title="Fit graph" aria-label="Fit graph">
+      <app-icon name="fit" />
+    </button>
+  </div>
+</div>
+
+<div class="graph-stage">
+  <div
+    #canvas
+    class="graph-canvas"
+    role="img"
+    [attr.aria-label]="'Dependency graph for ' + graph().origin + '. Use the selector and the relationship table for keyboard access.'"
+  ></div>
+  <span class="graph-direction">Arrows mean <strong>depends on</strong></span>
+</div>
+
+<ul class="legend">
+  <li><i class="swatch root"></i>Root cause</li>
+  <li><i class="swatch failing"></i>Failing</li>
+  <li><i class="swatch hidden"></i>Affected, not failing yet</li>
+  <li><i class="swatch degraded"></i>Degraded</li>
+  <li><i class="swatch healthy"></i>Healthy</li>
+  <li><i class="line dashed"></i>Optional dependency</li>
+</ul>
+
+<div class="path-strip" aria-live="polite">
+  <app-icon name="graph" />
+  @if (selectedName()) {
+    @if (path().length) {
+      <div class="path-nodes">
+        @for (name of path(); track $index; let last = $last) {
+          <strong>{{ name }}</strong>
+          @if (!last) {
+            <app-icon name="arrow" />
+          }
+        }
+      </div>
+    } @else {
+      <span>No directed path to the root in the returned graph.</span>
+    }
+  } @else {
+    <span>Pick a service, or tap one in the graph, to light up its path to <strong>{{ graph().origin }}</strong>.</span>
+  }
+</div>
+
+<details class="evidence-table">
+  <summary>Inspect {{ graph().edges.length }} graph relationships</summary>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Depends on</th>
+          <th>Critical</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (edge of graph().edges; track $index) {
+          <tr>
+            <td>{{ edge.source }}</td>
+            <td>{{ edge.target }}</td>
+            <td>{{ edge.critical ? 'Yes' : 'No' }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="3">No dependent relationships returned.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</details>

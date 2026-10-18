@@ -1,0 +1,22 @@
+<section class="metrics" aria-label="Graph metrics">
+  <a class="metric link" routerLink="/alerts">
+    <span>Open alerts <app-icon name="alert" /></span>
+    <strong>{{ alertCount() ?? '–' }}</strong>
+    <small>Signals firing right now</small>
+  </a>
+  <div class="metric">
+    <span>Root causes <app-icon name="graph" /></span>
+    <strong>{{ rootCount() ?? '–' }}</strong>
+    <small>Failing services with no failing dependency</small>
+  </div>
+  <div class="metric">
+    <span>Blast radius <app-icon name="layers" /></span>
+    <strong>{{ finding()?.severity?.affectedCount ?? '–' }} <em>services</em></strong>
+    <small>Depend on the selected root cause</small>
+  </div>
+  <div class="metric">
+    <span>Not alerting yet <app-icon name="eye" /></span>
+    <strong>{{ hiddenCount() ?? '–' }}</strong>
+    <small>Affected but not failing</small>
+  </div>
+</section>

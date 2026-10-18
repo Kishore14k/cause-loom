@@ -1,0 +1,16 @@
+dialog {
+  width: min(440px, calc(100vw - 32px));
+  padding: 20px 22px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+dialog::backdrop { background: rgba(2, 6, 16, 0.72); }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h2 { margin: 0; font-size: 18px; }
+p { color: var(--muted); margin: 10px 0 18px; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; }

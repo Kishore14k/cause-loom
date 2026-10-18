@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Causeloom symbol</title>
+  <desc>Vector recreation of the Causeloom identity. Connected service nodes converge on a root-cause node. Transparent background.</desc>
+  <g id="causeloom-symbol">
+    <g fill="none" stroke="#246BFD" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 427.6 129.8 A 200 205 0 1 0 427.6 382.2"/>
+      <path d="M 128.6 111 Q 226 160 335 256"/>
+      <path d="M 70 256 H 335"/>
+      <path d="M 128.6 401 Q 226 352 335 256"/>
+    </g>
+    <g fill="#B9DFFC">
+      <circle cx="344.9" cy="65.9" r="36"/>
+      <circle cx="128.6" cy="111" r="36"/>
+      <circle cx="70" cy="256" r="36"/>
+      <circle cx="128.6" cy="401" r="36"/>
+      <circle cx="344.9" cy="446.1" r="36"/>
+    </g>
+    <circle cx="335" cy="256" r="54" fill="#246BFD"/>
+  </g>
+</svg>

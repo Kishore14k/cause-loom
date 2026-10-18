@@ -1,0 +1,37 @@
+<section class="panel">
+  <div class="panel-heading">
+    <h2><app-icon name="bolt" /> Severity</h2>
+  </div>
+  @if (assessment(); as severity) {
+    <div class="panel-body">
+      <div class="level">
+        <app-status-badge [value]="severity.level" />
+        <span class="quiet-text">Computed by the graph</span>
+      </div>
+      <dl>
+        <div>
+          <dt>PageRank position</dt>
+          <dd>#{{ severity.rank }} <small>of {{ severity.totalServices }}</small></dd>
+        </div>
+        <div>
+          <dt>Critical dependents</dt>
+          <dd>{{ severity.hardAffectedCount }}</dd>
+        </div>
+        <div>
+          <dt>Service tier</dt>
+          <dd>{{ severity.tier }}</dd>
+        </div>
+      </dl>
+      <p class="quiet-text">PageRank score {{ severity.score | number: '1.4-6' }}</p>
+      <p class="quiet-text">
+        Tier and critical dependencies set the base level. PageRank can raise it by one step, but
+        only when real critical dependents exist.
+      </p>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <app-icon name="bolt" />
+      <p>The graph-based severity appears once a root cause is selected.</p>
+    </div>
+  }
+</section>

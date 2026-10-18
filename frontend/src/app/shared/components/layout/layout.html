@@ -1,0 +1,23 @@
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="shell">
+  <app-header class="header" />
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-controls="sidebar-nav"
+    [attr.aria-expanded]="sidebarOpen()"
+    [attr.aria-label]="sidebarOpen() ? 'Close navigation menu' : 'Open navigation menu'"
+    (click)="toggleSidebar()"
+  >
+    <app-icon [name]="sidebarOpen() ? 'close' : 'menu'" />
+  </button>
+  <app-sidebar
+    id="sidebar-nav"
+    class="side"
+    [class.is-open]="sidebarOpen()"
+    (click)="closeSidebar()"
+  />
+  <main id="main" class="main">
+    <router-outlet />
+  </main>
+</div>

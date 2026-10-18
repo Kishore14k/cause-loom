@@ -1,0 +1,54 @@
+<section class="panel">
+  <div class="panel-heading"><h2>Record an alert</h2></div>
+  <form (ngSubmit)="submit()" #form="ngForm">
+    <p class="quiet-text">
+      This calls the same endpoint a monitoring tool would. Use the exact service name from the
+      graph. The backend sets the service status from the severity.
+    </p>
+    <div class="fields">
+      <div>
+        <label for="alert-service">Service name</label>
+        <input
+          id="alert-service"
+          name="service"
+          [(ngModel)]="service"
+          required
+          maxlength="120"
+          placeholder="For example Payments"
+          [disabled]="loading()"
+        />
+      </div>
+      <div>
+        <label for="alert-severity">Severity</label>
+        <select id="alert-severity" name="severity" [(ngModel)]="severity" [disabled]="loading()">
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="warning">Warning</option>
+        </select>
+      </div>
+    </div>
+    <label for="alert-message">What happened?</label>
+    <textarea
+      id="alert-message"
+      name="message"
+      [(ngModel)]="message"
+      rows="3"
+      required
+      maxlength="2000"
+      placeholder="Describe the error you observed"
+      [disabled]="loading()"
+    ></textarea>
+    <div class="actions">
+      <button type="button" class="button secondary" [disabled]="loading()" (click)="cancelled.emit()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="button primary"
+        [disabled]="loading() || form.invalid || !service.trim() || !message.trim()"
+      >
+        {{ loading() ? 'Recording' : 'Record alert' }}
+      </button>
+    </div>
+  </form>
+</section>

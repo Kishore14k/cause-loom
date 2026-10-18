@@ -1,0 +1,19 @@
+:host { display: block; }
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px 10px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(79, 140, 255, 0.45);
+  border-radius: 8px;
+  background: rgba(79, 140, 255, 0.1);
+  color: #c9dcff;
+}
+
+.notice[data-kind='success'] { border-color: rgba(47, 191, 122, 0.5); background: rgba(47, 191, 122, 0.1); color: #a5ebc8; }
+.notice[data-kind='error']   { border-color: rgba(239, 68, 68, 0.5);  background: rgba(239, 68, 68, 0.12); color: #ffbcbc; }
+
+span { flex: 1; padding-top: 1px; }
+.icon-button { margin: -3px 0; }

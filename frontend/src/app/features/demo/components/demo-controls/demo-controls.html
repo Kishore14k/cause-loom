@@ -1,0 +1,27 @@
+<section id="demo" class="demo">
+  <div class="intro">
+    <app-icon name="play" />
+    <div>
+      <strong>Run the outage scenario</strong>
+      <p>A Database failure, alerts on the services above it, and a warning on Auth.</p>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="button secondary" type="button" [disabled]="disabled() || loading()" (click)="simulate()">
+      {{ loading() ? 'Working' : 'Simulate outage' }} <app-icon name="arrow" />
+    </button>
+    <button class="reset" type="button" [disabled]="disabled() || loading()" (click)="requestReset()">
+      Reset demo data
+    </button>
+  </div>
+</section>
+
+<app-notice-banner [notice]="notice()" (dismissed)="notice.set(null)" />
+
+<app-confirm-dialog
+  title="Reset the demo graph?"
+  message="This deletes the current graph, including alerts and incidents, and reseeds a healthy system."
+  confirmLabel="Reset demo"
+  [destructive]="true"
+  (confirmed)="reset()"
+/>

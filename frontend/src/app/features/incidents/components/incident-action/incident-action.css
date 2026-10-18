@@ -1,0 +1,5 @@
+:host { display: block; }
+.root { font-size: 20px; }
+.ticket { display: flex; align-items: center; gap: 10px; }
+.description { color: var(--text); }
+button { align-self: flex-start; }

@@ -1,0 +1,17 @@
+<details open>
+  <summary>Tools the agent chose <span>{{ steps().length }} calls, in order</span></summary>
+  <div class="steps">
+    @for (step of steps(); track $index) {
+      <div class="step">
+        <span class="number" [class.failed]="step.error">{{ step.step }}</span>
+        <div>
+          <strong class="mono">{{ step.tool }}</strong>
+          <small>{{ step.input || 'No arguments' }}</small>
+        </div>
+        <app-status-badge [value]="step.error ? 'error' : 'returned'" />
+      </div>
+    } @empty {
+      <p class="quiet-text">No tool calls were recorded by the backend.</p>
+    }
+  </div>
+</details>

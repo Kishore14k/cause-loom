@@ -1,0 +1,52 @@
+<div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Incident</th>
+        <th>Root cause</th>
+        <th>Severity</th>
+        <th>Status</th>
+        <th>Opened</th>
+        <th><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (incident of incidents(); track incident.id) {
+        <tr>
+          <td>
+            <strong class="mono">{{ incident.id }}</strong>
+            <span class="title">{{ incident.title }}</span>
+          </td>
+          <td>{{ incident.rootCause }}</td>
+          <td><app-status-badge [value]="incident.severity" /></td>
+          <td><app-status-badge [value]="incident.status" /></td>
+          <td class="muted">{{ incident.createdAt | date: 'medium' }}</td>
+          <td class="action">
+            @if (incident.status === 'open') {
+              <button
+                class="button secondary small"
+                type="button"
+                [disabled]="loading()"
+                (click)="resolveRequested.emit(incident)"
+              >
+                Resolve
+              </button>
+            } @else {
+              <span class="closed"><app-icon name="check" /> Closed</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">
+              <app-icon name="incident" />
+              <h3>No incidents found</h3>
+              <p>Run an investigation, or create an incident from a root cause, and it will show up here.</p>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

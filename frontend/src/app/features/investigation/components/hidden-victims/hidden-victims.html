@@ -1,0 +1,14 @@
+@if (nodes().length) {
+  <section class="hidden-victims">
+    <app-icon name="eye" />
+    <div>
+      <strong>Beyond the alerts</strong>
+      <p>These services depend on {{ graph().origin }} but are not failing yet. Warn their owners now.</p>
+    </div>
+    <div class="chips">
+      @for (node of nodes(); track node.name) {
+        <span>{{ node.name }} <small>{{ node.status }}</small></span>
+      }
+    </div>
+  </section>
+}

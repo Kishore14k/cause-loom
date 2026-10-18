@@ -1,0 +1,7 @@
+:host { display: block; }
+.level { display: flex; align-items: center; gap: 10px; }
+dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+dl div { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+dt { color: var(--muted); font-size: 12.5px; }
+dd { margin: 0; font-weight: 600; font-size: 18px; }
+dd small { color: var(--muted); font-weight: 400; font-size: 13px; }
